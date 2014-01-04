@@ -8,6 +8,13 @@ source env/bin/activate
 pip install -r requirements.txt
 ```
 
+To setup database for first time (in python interpreter in activated env):
+```python
+import flaskr
+flaskr.init_db()
+exit()
+```
+
 To run application:
 ```bash
 source env/bin/activate
