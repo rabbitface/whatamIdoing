@@ -1,19 +1,13 @@
 # all the imports
 import sqlite3
+import configs
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 from contextlib import closing
 
-# configuration
-DATABASE = '/tmp/flaskr.db'
-DEBUG = True
-SECRET_KEY = 'development key'
-USERNAME = 'admin'
-PASSWORD = 'default'
-
 # create our little application :)
 app = Flask(__name__)
-app.config.from_object(__name__)
+app.config.from_object(configs) # we import the config values from configs.py
 
 def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
@@ -69,7 +63,6 @@ def logout():
     session.pop('logged_in', None)
     flash('You were logged out')
     return redirect(url_for('show_entries'))
-
 
 # This always goes at the bottom of the file
 # What is ever inside this if statement runs automatically when file is running
