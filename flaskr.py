@@ -34,6 +34,27 @@ def show_entries():
     entries = [dict(title=row[0], text=row[1]) for row in cur.fetchall()]
     return render_template('show_entries.html', entries=entries)
 
+# raccoon added view, for looking at individual blog entries
+@app.route('/entry/<post_id>')
+def show_entry(post_id):
+    try:
+        post_id = int(post_id)    # check if post_id is an int
+    except:
+        return abort(404)
+    
+    # Get entry from database
+    cur = g.db.execute('select title, text from entries where id=%d' % post_id)
+    entry = [dict(title=row[0], text=row[1]) for row in cur.fetchall()]
+    
+    if len(entry) == 0:
+        return abort(404) # entry did not exist
+    else:
+        entry = entry[0] # we only needed the first entry (and there should only be one)
+    
+    # example entry: {'text': u'my blogging', 'title': u'my title'}
+    return render_template('entry.html', entry=entry)
+
+
 @app.route('/add', methods=['POST'])
 def add_entry():
     if not session.get('logged_in'):
